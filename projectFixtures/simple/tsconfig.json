@@ -4,9 +4,11 @@
     "target": "esnext",
     "module": "commonjs",
     "strict": true,
+    "skipLibCheck": true,
     "types": ["node"],
     "typeRoots": ["./node_modules/@types"],
     "outDir": "lib"
   },
-  "include": ["src/**/*.ts"]
+  "include": ["src/**/*.ts"],
+  "exclude": ["node_modules"]
 }

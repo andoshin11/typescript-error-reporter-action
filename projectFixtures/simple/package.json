@@ -4,7 +4,8 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "test": "node ../../lib/bin/cli.js run"
+    "test": "node ../../lib/bin/cli.js run",
+    "test:check": "node ../../dist/index.js"
   },
   "devDependencies": {
     "@types/node": "^13.9.0",
