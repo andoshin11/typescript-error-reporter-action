@@ -1,0 +1,12 @@
+{
+  "compilerOptions": {
+    "declaration": true,
+    "target": "esnext",
+    "module": "commonjs",
+    "strict": true,
+    "types": ["node"],
+    "typeRoots": ["./node_modules/@types"],
+    "outDir": "lib"
+  },
+  "include": ["src/**/*.ts"]
+}

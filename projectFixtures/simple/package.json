@@ -1,0 +1,14 @@
+{
+  "name": "simple",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "test": "node ../../lib/bin/cli.js run"
+  },
+  "devDependencies": {
+    "@types/node": "^13.9.0",
+    "typescript": "^3.8.3"
+  },
+  "dependencies": {}
+}

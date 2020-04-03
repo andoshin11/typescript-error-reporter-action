@@ -1,0 +1,27 @@
+{
+  "name": "tsc-github-actions-reporter",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "andoshin11 <shinglish11@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc -w",
+    "gen:diagMap": "node scripts/genDiagnosticsMap.js",
+    "test:type": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@types/clui": "^0.3.0",
+    "@types/commander": "^2.12.2",
+    "@types/glob": "^7.1.1",
+    "@types/node": "^13.7.7",
+    "typescript": "^3.8.3"
+  },
+  "dependencies": {
+    "chalk": "^3.0.0",
+    "clui": "^0.3.6",
+    "commander": "^4.1.1",
+    "enquirer": "^2.3.4",
+    "glob": "^7.1.6"
+  }
+}
