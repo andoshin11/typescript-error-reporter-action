@@ -18,7 +18,6 @@
     "webpack-cli": "^3.3.11"
   },
   "dependencies": {
-    "@actions/core": "^1.2.3",
-    "chalk": "^3.0.0"
+    "@actions/core": "^1.2.3"
   }
 }

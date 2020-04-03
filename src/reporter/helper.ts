@@ -1,5 +1,4 @@
 import * as _ts from 'typescript'
-import * as chalk from 'chalk'
 import { Message } from '../types'
 import { pos2location } from '../utils'
 
@@ -10,15 +9,6 @@ export const pad = (letter: string, length: number) => {
   }
   return outs.join('');
 }
-
-export const lineMark = (line: number, width: number) => {
-  const strLine = line + 1 + '';
-  return chalk.inverse(pad(' ', width - strLine.length) + strLine) + ' '
-};
-
-export const lineMarkForUnderline = (width: number) => {
-  return chalk.inverse(pad(' ', width)) + ' ';
-};
 
 const category2command = (category: _ts.DiagnosticCategory, ts: typeof _ts): 'error' | 'warning' | undefined => {
   switch (category) {
