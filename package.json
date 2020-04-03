@@ -1,5 +1,5 @@
 {
-  "name": "tsc-github-actions-reporter",
+  "name": "tsc-reporter",
   "version": "1.0.0",
   "main": "index.js",
   "author": "andoshin11 <shinglish11@gmail.com>",
