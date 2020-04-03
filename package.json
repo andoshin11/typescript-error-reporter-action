@@ -8,10 +8,12 @@
     "build": "tsc",
     "watch": "webpack -w",
     "bundle": "webpack",
-    "test:type": "tsc --noEmit"
+    "test:type": "tsc --noEmit",
+    "pack:libDTS": "node scripts/packLibDTS.js"
   },
   "devDependencies": {
     "@types/concat-stream": "^1.6.0",
+    "@types/glob": "^7.1.1",
     "@types/node": "^13.7.7",
     "@types/yarnpkg__lockfile": "^1.1.3",
     "hard-source-webpack-plugin": "^0.13.1",
@@ -23,6 +25,7 @@
   "dependencies": {
     "@actions/core": "^1.2.3",
     "@yarnpkg/lockfile": "^1.1.0",
-    "concat-stream": "^2.0.0"
+    "concat-stream": "^2.0.0",
+    "glob": "^7.1.6"
   }
 }
