@@ -4,6 +4,9 @@
     "module": "commonjs",
     "strict": true,
     "types": ["node"],
+    "lib": ["ES2017"],
+    "incremental": true,
+    "esModuleInterop": true,
     "moduleResolution": "node",
     "outDir": "lib"
   },
