@@ -7,7 +7,7 @@
   "scripts": {
     "build": "tsc",
     "watch": "tsc -w",
-    "gen:diagMap": "node scripts/genDiagnosticsMap.js",
+    "bundle": "webpack",
     "test:type": "tsc --noEmit"
   },
   "devDependencies": {
@@ -15,9 +15,13 @@
     "@types/commander": "^2.12.2",
     "@types/glob": "^7.1.1",
     "@types/node": "^13.7.7",
-    "typescript": "^3.8.3"
+    "ts-loader": "^6.2.2",
+    "typescript": "^3.8.3",
+    "webpack": "^4.42.1",
+    "webpack-cli": "^3.3.11"
   },
   "dependencies": {
+    "@actions/core": "^1.2.3",
     "chalk": "^3.0.0",
     "clui": "^0.3.6",
     "commander": "^4.1.1",
