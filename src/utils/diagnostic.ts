@@ -1,4 +1,3 @@
-import * as ts from 'typescript'
 import { Location } from '../types'
 
 export const pos2location = (content: string, pos: number): Location => {

@@ -1,4 +1,4 @@
-import * as ts from 'typescript'
+import * as _ts from 'typescript'
 import * as chalk from 'chalk'
 import { Message } from '../types'
 import { pos2location } from '../utils'
@@ -20,7 +20,7 @@ export const lineMarkForUnderline = (width: number) => {
   return chalk.inverse(pad(' ', width)) + ' ';
 };
 
-const category2command = (category: ts.DiagnosticCategory): 'error' | 'warning' | undefined => {
+const category2command = (category: _ts.DiagnosticCategory, ts: typeof _ts): 'error' | 'warning' | undefined => {
   switch (category) {
     case ts.DiagnosticCategory.Error:
       return 'error'
@@ -31,7 +31,7 @@ const category2command = (category: ts.DiagnosticCategory): 'error' | 'warning' 
   }
 }
 
-const getProperties = (diagnostic: ts.Diagnostic): Message['properties'] => {
+const getProperties = (diagnostic: _ts.Diagnostic): Message['properties'] => {
   const file = diagnostic.file && diagnostic.file.fileName
   if (!file) return {}
 
@@ -47,8 +47,8 @@ const getProperties = (diagnostic: ts.Diagnostic): Message['properties'] => {
   }
 }
 
-export const diagnostic2message = (diagnostic: ts.Diagnostic): Message | undefined => {
-  const command = category2command(diagnostic.category)
+export const diagnostic2message = (diagnostic: _ts.Diagnostic, ts: typeof _ts): Message | undefined => {
+  const command = category2command(diagnostic.category, ts)
   if (!command) return undefined
 
   const properties = getProperties(diagnostic)

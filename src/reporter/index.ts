@@ -1,24 +1,25 @@
-import * as ts from 'typescript'
+import * as _ts from 'typescript'
 import * as chalk from 'chalk'
 import { issueCommand } from '@actions/core/lib/command'
-import { pos2location, toRelativePath, nonNullable } from '../utils'
-import { DiagnosticWithRange } from '../types'
-import { lineMark, pad, lineMarkForUnderline, diagnostic2message } from './helper'
+import { pos2location, nonNullable } from '../utils'
+import { diagnostic2message } from './helper'
 
 export class Reporter {
+  constructor(private ts: typeof _ts) {}
+
   report(msg: any) {
     console.log(msg)
   }
 
-  reportDiagnosticsSummary(diagnostics: ts.Diagnostic[]) {
+  reportDiagnosticsSummary(diagnostics: _ts.Diagnostic[]) {
     if (!diagnostics.length) {
       this.report('✨  No type error found')
       return
     }
 
     let outputs: string[] = []
-    const errors = diagnostics.filter(d => d.category === ts.DiagnosticCategory.Error).length
-    const warnings = diagnostics.filter(d => d.category === ts.DiagnosticCategory.Warning).length
+    const errors = diagnostics.filter(d => d.category === this.ts.DiagnosticCategory.Error).length
+    const warnings = diagnostics.filter(d => d.category === this.ts.DiagnosticCategory.Warning).length
 
     if (!!errors) outputs.push(`Found ${chalk.red(errors)} errors`)
     if (!!warnings) outputs.push(`Found ${chalk.yellow(warnings)} warnings`)
@@ -27,66 +28,18 @@ export class Reporter {
     this.report(output)
   }
 
-  reportDiagnostics(diagnostics: ts.Diagnostic[]) {
+  reportDiagnostics(diagnostics: _ts.Diagnostic[]) {
+    const ts = this.ts
     // Target only Error & Warning type
     const targetDiagnostics = diagnostics.filter(d => {
-      return d.category === ts.DiagnosticCategory.Error || d.category === ts.DiagnosticCategory.Warning
+      return d.category === this.ts.DiagnosticCategory.Error || d.category === ts.DiagnosticCategory.Warning
     })
 
-    const messages = targetDiagnostics.map(diagnostic2message).filter(nonNullable)
+    const messages = targetDiagnostics.map(d => diagnostic2message(d, ts)).filter(nonNullable)
+    console.log(messages)
     messages.forEach(({ command, properties, message }) => {
       // @ts-ignore
-      issueCommand(command, properties, message)
+      // issueCommand(command, properties, message)
     })
-  }
-
-  _reportDiagnosticWithRange(diagnostic: DiagnosticWithRange) {
-    const { start, length, file, messageText } = diagnostic
-    const content = file && file.getFullText()
-    if (!content) return
-
-    const relativeFileName = toRelativePath(file!.fileName)
-    const startLC = pos2location(content, start)
-    const endLC = pos2location(content, start + length)
-    const fileIndicator = `${relativeFileName}:${startLC.line + 1}:${startLC.character + 1}`
-    const message = typeof messageText === 'string' ? messageText : messageText.messageText
-    const outputs = [`${fileIndicator} - ${message}`, '']
-    const allLines = content.split('\n');
-    const preLines = allLines.slice(Math.max(startLC.line - 1, 0), startLC.line);
-    const lines = allLines.slice(startLC.line, endLC.line + 1);
-    const postLines = allLines.slice(endLC.line + 1, Math.min(allLines.length - 1, endLC.line + 2));
-    const lineMarkerWidth = (Math.min(allLines.length - 1, endLC.line + 2) + '').length;
-    for (let i = 0; i < preLines.length; ++i) {
-      outputs.push(lineMark(i + startLC.line - 1, lineMarkerWidth) + chalk.reset(preLines[i]));
-    }
-    for (let i = 0; i < lines.length; ++i) {
-      outputs.push(lineMark(i + startLC.line, lineMarkerWidth) + lines[i]);
-      if (i === 0) {
-        if (startLC.line === endLC.line) {
-          outputs.push(
-            lineMarkForUnderline(lineMarkerWidth) +
-              pad(' ', startLC.character) +
-              chalk.red(pad('~', endLC.character - startLC.character)),
-          );
-        } else {
-          outputs.push(
-            lineMarkForUnderline(lineMarkerWidth) +
-              pad(' ', startLC.character) +
-              chalk.red(pad('~', lines[i].length - startLC.character)),
-          );
-        }
-      } else if (i === lines.length - 1) {
-        outputs.push(lineMarkForUnderline(lineMarkerWidth) + chalk.red(pad('~', endLC.character)));
-      } else {
-        outputs.push(lineMarkForUnderline(lineMarkerWidth) + chalk.red(pad('~', lines[i].length)));
-      }
-    }
-
-    for (let i = 0; i < postLines.length; ++i) {
-      outputs.push(lineMark(i + endLC.line + 1, lineMarkerWidth) + chalk.reset(postLines[i]));
-    }
-    outputs.push('');
-
-    this.report(outputs.join('\n'))
   }
 }

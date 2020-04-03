@@ -1,7 +1,6 @@
 import { issueCommand } from '@actions/core/lib/command'
 import * as path from 'path'
 import * as fs from 'fs'
-import * as ts from 'typescript'
 import { Doctor } from './doctor'
 
 async function main() {
@@ -13,7 +12,13 @@ async function main() {
       throw new Error(`could not find tsconfig.json at: ${currentDir}`)
     }
 
-    const doctor = Doctor.fromConfigFile(configPath)
+    const localTSPath = path.resolve(currentDir, 'node_modules', 'typescript')
+    if (!fs.existsSync(localTSPath)) {
+      throw new Error(`could not find local typescript module at : ${localTSPath}`)
+    }
+    const localTS = require(localTSPath)
+
+    const doctor = Doctor.fromConfigFile(configPath, localTS)
     const diagnostics = doctor.getSemanticDiagnostics()
     doctor.reporter.reportDiagnostics(diagnostics)
   } catch (e) {

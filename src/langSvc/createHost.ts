@@ -1,11 +1,11 @@
-import * as ts from 'typescript'
+import * as _ts from 'typescript'
 import * as fs from 'fs'
 import * as path from 'path'
 import { FileEntry } from '../types'
 
-export const createHost = (fileNames: string[], compilerOptions: ts.CompilerOptions, fileEntry: FileEntry): ts.LanguageServiceHost => {
+export const createHost = (fileNames: string[], compilerOptions: _ts.CompilerOptions, fileEntry: FileEntry, ts: typeof _ts): _ts.LanguageServiceHost => {
   const getCurrentVersion = (fileName: string) => fileEntry.has(fileName) ? fileEntry.get(fileName)!.version : 0
-  const getTextFromSnapshot = (snapshot: ts.IScriptSnapshot) => snapshot.getText(0, snapshot.getLength())
+  const getTextFromSnapshot = (snapshot: _ts.IScriptSnapshot) => snapshot.getText(0, snapshot.getLength())
 
   const readFile = (fileName: string, encoding: string | undefined = 'utf8') => {
     fileName = path.normalize(fileName);
@@ -21,7 +21,7 @@ export const createHost = (fileNames: string[], compilerOptions: ts.CompilerOpti
     encoding?: string | undefined
   ) => ts.sys.readFile(filePath, encoding) || readFile(filePath, encoding);
 
-  const moduleResolutionHost: ts.ModuleResolutionHost = {
+  const moduleResolutionHost: _ts.ModuleResolutionHost = {
     fileExists: fileName => {
       return ts.sys.fileExists(fileName) || readFile(fileName) !== undefined
     },
@@ -38,7 +38,7 @@ export const createHost = (fileNames: string[], compilerOptions: ts.CompilerOpti
     getDirectories: ts.sys.getDirectories
   }
 
-  const host: ts.LanguageServiceHost = {
+  const host: _ts.LanguageServiceHost = {
     getScriptFileNames: () => fileNames,
     getScriptVersion: fileName => getCurrentVersion(fileName) + '',
     getScriptSnapshot: fileName => {
@@ -58,9 +58,9 @@ export const createHost = (fileNames: string[], compilerOptions: ts.CompilerOpti
     getCompilationSettings: () => compilerOptions,
     getDefaultLibFileName: options => ts.getDefaultLibFilePath(options),
     resolveModuleNames: (moduleNames, containingFile, _, __, options) => {
-      const ret: (ts.ResolvedModule | undefined)[] = moduleNames.map(name => {
+      const ret: (_ts.ResolvedModule | undefined)[] = moduleNames.map(name => {
           if (/\.vue$/.test(name)) {
-            const resolved: ts.ResolvedModule = {
+            const resolved: _ts.ResolvedModule = {
               resolvedFileName: normalize(path.resolve(path.dirname(containingFile), name))
             }
             return resolved
