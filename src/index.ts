@@ -1,4 +1,3 @@
-import { issueCommand } from '@actions/core/lib/command'
 import * as path from 'path'
 import * as fs from 'fs'
 import { Doctor } from './doctor'
