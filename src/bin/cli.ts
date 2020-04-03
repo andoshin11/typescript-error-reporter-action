@@ -2,7 +2,7 @@ import * as commander from 'commander'
 import * as path from 'path'
 import * as fs from 'fs'
 import { Doctor } from '../doctor'
-import { exec as run } from './commands/run'
+// import { exec as run } from './commands/run'
 
 /**
  * Idea:
@@ -27,7 +27,7 @@ commander
       }
 
       const doctor = Doctor.fromConfigFile(configPath, true)
-      await run(doctor)
+      // await run(doctor)
 
     } catch (e) {
       throw e
