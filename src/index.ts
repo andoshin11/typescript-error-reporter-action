@@ -1,6 +1,7 @@
 import * as path from 'path'
 import * as fs from 'fs'
-import * as glob from 'glob'
+import { DiagnosticCategory } from 'typescript'
+import { setFailed } from '@actions/core'
 import * as YarnLockFile from '@yarnpkg/lockfile'
 import { Doctor } from './doctor'
 import { loadTSModule } from './loadTSModule'
@@ -65,9 +66,17 @@ async function main() {
   
     const doctor = Doctor.fromConfigFile(configPath, remoteTS)
     const diagnostics = doctor.getSemanticDiagnostics()
-    doctor.reporter.reportDiagnostics(diagnostics)
+
+    if (diagnostics) {
+      doctor.reporter.reportDiagnostics(diagnostics)
+      const errors = diagnostics.filter(d => d.category === DiagnosticCategory.Error)
+      if (errors.length) {
+        setFailed(`Found ${errors.length} errors!`)
+      }
+    }
+
   } catch (e) {
-    throw e
+    setFailed(e)
   }
 }
 
