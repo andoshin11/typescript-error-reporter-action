@@ -1,8 +1,54 @@
 import * as path from 'path'
 import * as fs from 'fs'
+import * as YarnLockFile from '@yarnpkg/lockfile'
 import { Doctor } from './doctor'
+import { loadTSModule } from './loadTSModule'
 
-type TSModule = typeof import('typescript')
+function parseTSVersion(currentDir: string) {
+  const yarnLockFilePath = path.resolve(currentDir, 'yarn.lock')
+  const packageLockFile = path.resolve(currentDir, 'package-lock.json')
+  if (fs.existsSync(yarnLockFilePath)) {
+    const content = fs.readFileSync(yarnLockFilePath, 'utf8')
+    return parseTSVersionFromYarnLockFile(content)
+  } else if (fs.existsSync(packageLockFile)) {
+    const content = fs.readFileSync(packageLockFile, 'utf8')
+    return parseTSVersionFromPackageLockFile(content)
+  } else {
+    throw new Error('no lock file found.')
+  }
+}
+
+function parseTSVersionFromYarnLockFile(content: string) {
+  const { type, object } = YarnLockFile.parse(content)
+  if (type !== 'success') {
+    throw new Error('failed to parse yarn.lock')
+  }
+  const packages = Object.keys(object)
+  const _typescript = packages.find(p => /^typescript@.*/.test(p))
+  if (!_typescript) {
+    throw new Error('could not find typescript in yarn.lock')
+  }
+  const _typescriptInfo = object[_typescript]
+  const tsVersion = _typescriptInfo && _typescriptInfo['version']
+  if (typeof tsVersion !== 'string') {
+    throw new Error('could not par typescript version from yarn.lock')
+  }
+  return tsVersion
+}
+
+function parseTSVersionFromPackageLockFile(content: string) {
+  const json = JSON.parse(content)
+  const dependencies = json['dependencies'] || {}
+  const _typescriptInfo = dependencies['typescript']
+  if (!_typescriptInfo) {
+    throw new Error('could not find typescript in package-lock.json')
+  }
+  const tsVersion = _typescriptInfo['version']
+  if (typeof tsVersion !== 'string') {
+    throw new Error('could not par typescript version from yarn.lock')
+  }
+  return tsVersion
+}
 
 async function main() {
   try {
@@ -13,26 +59,15 @@ async function main() {
       throw new Error(`could not find tsconfig.json at: ${currentDir}`)
     }
 
-    const localTSPath = path.resolve(currentDir, 'node_modules/typescript')
-    if (!fs.existsSync(localTSPath)) {
-      throw new Error(`could not find local typescript module at : ${localTSPath}`)
-    }
+    const tsVersion = parseTSVersion(currentDir)
 
-    let localTS: TSModule
-
-    try {
-      localTS = require(localTSPath);
-      console.log(`Loaded typescript@${localTS.version} from workspace.`);
-    } catch (err) {
-      localTS = require('typescript');
-      console.log(`Failed to load typescript from workspace. Using bundled typescript@${localTS.version}.`);
-    }
+    const localTS = await loadTSModule(tsVersion)
 
     const doctor = Doctor.fromConfigFile(configPath, localTS)
     const diagnostics = doctor.getSemanticDiagnostics()
     doctor.reporter.reportDiagnostics(diagnostics)
   } catch (e) {
-    console.log(e)
+    throw e
   }
 }
 
