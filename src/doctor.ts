@@ -4,6 +4,7 @@ import * as path from 'path'
 import { createHost, createService } from './langSvc'
 import { Reporter } from './reporter'
 import { FileEntry } from './types'
+import { getAllLibs } from './utils'
 
 export class Doctor {
   private service: _ts.LanguageService
@@ -24,7 +25,22 @@ export class Doctor {
         ts.sys,
         path.dirname(configPath)
     );
-    return new Doctor(parsed.fileNames, parsed.options, ts)
+
+    const libs = (parsed.options.lib || [])
+    const allLibs = getAllLibs(libs)
+
+    /**
+     * Note:
+     * 
+     * since we use CDN-hosted TS runtime, which is a bundled version,
+     * we need to manually added lib.*.d.ts. 
+     */
+    const fileNames = [
+      ...parsed.fileNames,
+      ...allLibs
+    ]
+
+    return new Doctor(fileNames, parsed.options, ts)
   }
 
   getSemanticDiagnostics() {

@@ -1,5 +1,6 @@
 import * as path from 'path'
 import * as fs from 'fs'
+import * as glob from 'glob'
 import * as YarnLockFile from '@yarnpkg/lockfile'
 import { Doctor } from './doctor'
 import { loadTSModule } from './loadTSModule'
@@ -60,10 +61,9 @@ async function main() {
     }
 
     const tsVersion = parseTSVersion(currentDir)
-
-    const localTS = await loadTSModule(tsVersion)
-
-    const doctor = Doctor.fromConfigFile(configPath, localTS)
+    const remoteTS = await loadTSModule(tsVersion)
+  
+    const doctor = Doctor.fromConfigFile(configPath, remoteTS)
     const diagnostics = doctor.getSemanticDiagnostics()
     doctor.reporter.reportDiagnostics(diagnostics)
   } catch (e) {

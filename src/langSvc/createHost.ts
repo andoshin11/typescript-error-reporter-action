@@ -2,12 +2,19 @@ import * as _ts from 'typescript'
 import * as fs from 'fs'
 import * as path from 'path'
 import { FileEntry } from '../types'
+import { libDTS } from '../gen/libDTS'
+
+const libDTSRegexp = /^lib\..*\.d\.ts$/
 
 export const createHost = (fileNames: string[], compilerOptions: _ts.CompilerOptions, fileEntry: FileEntry, ts: typeof _ts): _ts.LanguageServiceHost => {
   const getCurrentVersion = (fileName: string) => fileEntry.has(fileName) ? fileEntry.get(fileName)!.version : 0
   const getTextFromSnapshot = (snapshot: _ts.IScriptSnapshot) => snapshot.getText(0, snapshot.getLength())
 
   const readFile = (fileName: string, encoding: string | undefined = 'utf8') => {
+    if (libDTSRegexp.test(fileName)) {
+      return libDTS[fileName].content
+    }
+
     fileName = path.normalize(fileName);
     try {
       return fs.readFileSync(fileName, encoding);
@@ -19,7 +26,9 @@ export const createHost = (fileNames: string[], compilerOptions: _ts.CompilerOpt
   const readFileWithFallback = (
     filePath: string,
     encoding?: string | undefined
-  ) => ts.sys.readFile(filePath, encoding) || readFile(filePath, encoding);
+  ) => {
+    return ts.sys.readFile(filePath, encoding) || readFile(filePath, encoding)
+  }
 
   const moduleResolutionHost: _ts.ModuleResolutionHost = {
     fileExists: fileName => {
@@ -45,10 +54,12 @@ export const createHost = (fileNames: string[], compilerOptions: _ts.CompilerOpt
       if (fileEntry.has(fileName)) {
         return fileEntry.get(fileName)!.scriptSnapshot
       } else {
-        if (!fs.existsSync(fileName)) {
+        const isLibDTS = libDTSRegexp.test(fileName)
+        if (!isLibDTS && !fs.existsSync(fileName)) {
           return undefined
         }
-        const content = fs.readFileSync(fileName).toString()
+        const content = isLibDTS ? libDTS[fileName].content : fs.readFileSync(fileName).toString()
+
         const scriptSnapshot = ts.ScriptSnapshot.fromString(content)
         fileEntry.set(fileName, { version: 0, scriptSnapshot })
         return scriptSnapshot
