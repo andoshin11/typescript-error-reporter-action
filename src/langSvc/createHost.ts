@@ -30,7 +30,7 @@ export const createHost = (fileNames: string[], compilerOptions: _ts.CompilerOpt
         const snapshot = fileEntry.get(fileName)!.scriptSnapshot
         return getTextFromSnapshot(snapshot)
       }
-      readFileWithFallback
+      return readFileWithFallback(fileName)
     },
     realpath: ts.sys.realpath,
     directoryExists: ts.sys.directoryExists,

@@ -4,6 +4,7 @@
     "module": "commonjs",
     "strict": true,
     "types": ["node"],
+    "moduleResolution": "node",
     "outDir": "lib"
   },
   "include": ["src/**/*.ts"],
