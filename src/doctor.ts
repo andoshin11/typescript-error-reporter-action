@@ -24,35 +24,12 @@ export class Doctor {
         ts.sys,
         path.dirname(configPath)
     );
-    const rootFileNames = [
-      ...parsed.fileNames
-    ]
-    return new Doctor(rootFileNames, parsed.options, debug)
+    return new Doctor(parsed.fileNames, parsed.options, debug)
   }
 
   getSemanticDiagnostics() {
-    const { fileNames, service } = this
+    const { service } = this
     const result = service.getProgram()!.getSemanticDiagnostics()
-    // console.log(result)
     return [...result]
-    // const result = fileNames.reduce((acc, ac) => {
-    //   console.log('L49')
-    //   console.log(ac)
-    //   acc = [...acc, ...service.getSemanticDiagnostics(ac)]
-    //   return acc
-    // }, [] as ts.Diagnostic[])
-    // return result
-    return []
-  }
-
-  runDiagnostics() {
-    const diagnostics = this.getSemanticDiagnostics()
-
-    this.reporter.reportDiagnostics(diagnostics)
-    this.reporter.reportDiagnosticsSummary(diagnostics)
-
-    return {
-      diagnostics
-    }
   }
 }

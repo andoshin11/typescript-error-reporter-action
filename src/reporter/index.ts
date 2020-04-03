@@ -1,8 +1,9 @@
 import * as ts from 'typescript'
 import * as chalk from 'chalk'
-import { pos2location, hasDiagRange, toRelativePath } from '../utils'
+import { issueCommand } from '@actions/core/lib/command'
+import { pos2location, toRelativePath, nonNullable } from '../utils'
 import { DiagnosticWithRange } from '../types'
-import { lineMark, pad, lineMarkForUnderline } from './helper'
+import { lineMark, pad, lineMarkForUnderline, diagnostic2message } from './helper'
 
 export class Reporter {
   report(msg: any) {
@@ -27,12 +28,15 @@ export class Reporter {
   }
 
   reportDiagnostics(diagnostics: ts.Diagnostic[]) {
-    diagnostics.forEach(d => {
-      if (hasDiagRange(d)) {
-        this._reportDiagnosticWithRange(d)
-      } else {
-        this.report(d)
-      }
+    // Target only Error & Warning type
+    const targetDiagnostics = diagnostics.filter(d => {
+      return d.category === ts.DiagnosticCategory.Error || d.category === ts.DiagnosticCategory.Warning
+    })
+
+    const messages = targetDiagnostics.map(diagnostic2message).filter(nonNullable)
+    messages.forEach(({ command, properties, message }) => {
+      // @ts-ignore
+      issueCommand(command, properties, message)
     })
   }
 

@@ -1,5 +1,5 @@
 import * as ts from 'typescript'
-import { Location, DiagnosticWithRange } from '../types'
+import { Location } from '../types'
 
 export const pos2location = (content: string, pos: number): Location => {
   let l = 0,
@@ -14,11 +14,6 @@ export const pos2location = (content: string, pos: number): Location => {
     }
   }
   return { line: l, character: c };
-}
-
-export const hasDiagRange = (diagnostic: ts.Diagnostic): diagnostic is DiagnosticWithRange => {
-  const { start, length } = diagnostic
-  return typeof start === 'number' && typeof length === 'number'
 }
 
 export const toRelativePath = (str: string) => str.replace(process.cwd() + '/', '')
