@@ -2,6 +2,8 @@ import * as path from 'path'
 import * as fs from 'fs'
 import { Doctor } from './doctor'
 
+type TSModule = typeof import('typescript')
+
 async function main() {
   try {
 
@@ -11,17 +13,26 @@ async function main() {
       throw new Error(`could not find tsconfig.json at: ${currentDir}`)
     }
 
-    const localTSPath = path.resolve(currentDir, 'node_modules', 'typescript')
+    const localTSPath = path.resolve(currentDir, 'node_modules/typescript')
     if (!fs.existsSync(localTSPath)) {
       throw new Error(`could not find local typescript module at : ${localTSPath}`)
     }
-    const localTS = require(localTSPath)
+
+    let localTS: TSModule
+
+    try {
+      localTS = require(localTSPath);
+      console.log(`Loaded typescript@${localTS.version} from workspace.`);
+    } catch (err) {
+      localTS = require('typescript');
+      console.log(`Failed to load typescript from workspace. Using bundled typescript@${localTS.version}.`);
+    }
 
     const doctor = Doctor.fromConfigFile(configPath, localTS)
     const diagnostics = doctor.getSemanticDiagnostics()
     doctor.reporter.reportDiagnostics(diagnostics)
   } catch (e) {
-    throw e
+    console.log(e)
   }
 }
 
