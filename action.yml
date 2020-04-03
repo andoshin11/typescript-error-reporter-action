@@ -1,0 +1,6 @@
+name: 'tsc-github-actions-reporter'
+description: 'TS compiler diagnostics reporter'
+author: 'andoshin11'
+runs:
+  using: 'node12'
+  main: 'dist/index.js'
