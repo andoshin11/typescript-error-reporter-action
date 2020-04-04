@@ -1,4 +1,4 @@
-name: 'tsc-github-actions-reporter'
+name: 'TypeScript Error Reporter'
 description: 'TS compiler diagnostics reporter'
 author: 'andoshin11'
 runs:
