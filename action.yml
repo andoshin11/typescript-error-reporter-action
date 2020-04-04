@@ -1,5 +1,5 @@
 name: 'TypeScript Error Reporter'
-description: 'TS compiler diagnostics reporter'
+description: 'Report type check result on PR diff view.'
 author: 'andoshin11'
 runs:
   using: 'node12'
