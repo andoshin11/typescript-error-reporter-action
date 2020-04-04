@@ -1,9 +1,17 @@
 {
   "name": "typescript-error-reporter-action",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "dist/index.js",
   "author": "andoshin11 <shinglish11@gmail.com>",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/andoshin11/typescript-error-reporter-action.git"
+  },
+  "bugs": {
+    "url": "https://github.com/andoshin11/typescript-error-reporter-action/issues"
+  },
+  "homepage": "https://github.com/andoshin11/typescript-error-reporter-action#readme",
   "scripts": {
     "build": "tsc",
     "watch": "webpack -w",

@@ -1,4 +1,4 @@
-# TypeScript Error Reporter Action
+# TypeScript Error Reporter Action ![GitHub release (latest SemVer including pre-releases)](https://img.shields.io/github/v/release/andoshin11/typescript-error-reporter?include_prereleases) ![GitHub](https://img.shields.io/github/license/andoshin11/typescript-error-reporter)
 
 Ensuring type safety is one of the most important responsibilities of modern software developers.
 
@@ -29,7 +29,7 @@ jobs:
       - name: Install dependencies
         run: yarn --frozen-lockfile
       - name: Typecheck
-        uses: andoshin11/typescript-error-reporter-action@v1.0.0
+        uses: andoshin11/typescript-error-reporter-action@v1.0.1
 ```
 
 `tsconfig.json`:
