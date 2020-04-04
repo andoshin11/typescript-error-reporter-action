@@ -1,5 +1,5 @@
 {
-  "name": "tsc-reporter",
+  "name": "typescript-error-reporter-action",
   "version": "1.0.0",
   "main": "index.js",
   "author": "andoshin11 <shinglish11@gmail.com>",

@@ -24,7 +24,7 @@ jobs:
       - name: Install dependencies
         run: |
           yarn install
-      - uses: andoshin11/tsc-reporter@v1.0.0
+      - uses: andoshin11/typescript-error-reporter-action@v1.0.0
 ```
 
 whereas your `tsconfig.json` should look like this.
