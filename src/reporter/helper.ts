@@ -2,14 +2,6 @@ import * as _ts from 'typescript'
 import { Message } from '../types'
 import { pos2location } from '../utils'
 
-export const pad = (letter: string, length: number) => {
-  const outs: string[] = [];
-  for (let i = 0; i < length; i++) {
-    outs.push(letter);
-  }
-  return outs.join('');
-}
-
 const category2command = (category: _ts.DiagnosticCategory, ts: typeof _ts): 'error' | 'warning' | undefined => {
   switch (category) {
     case ts.DiagnosticCategory.Error:
