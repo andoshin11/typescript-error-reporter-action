@@ -1,7 +1,7 @@
 import { Location } from '../types'
 
 export const pos2location = (content: string, pos: number): Location => {
-  let l = 0,
+  let l = 1,
     c = 0;
   for (let i = 0; i < content.length && i < pos; i++) {
     const cc = content[i];
