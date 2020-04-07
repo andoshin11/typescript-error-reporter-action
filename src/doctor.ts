@@ -4,7 +4,7 @@ import * as path from 'path'
 import { createHost, createService } from './langSvc'
 import { Reporter } from './reporter'
 import { FileEntry } from './types'
-import { getAllLibs } from './utils'
+import { getAllLibs, uniq } from './utils'
 
 export class Doctor {
   private service: _ts.LanguageService
@@ -25,9 +25,11 @@ export class Doctor {
         ts.sys,
         path.dirname(configPath)
     );
+    const compilerOptions = parsed.options
 
-    const libs = (parsed.options.lib || [])
-    const allLibs = getAllLibs(libs)
+    const defaultLibFileName = _ts.getDefaultLibFileName(compilerOptions)
+    const libs =  [defaultLibFileName, ...(compilerOptions.lib || [])]
+    const allLibs = getAllLibs(uniq(libs))
 
     /**
      * Note:
@@ -40,7 +42,7 @@ export class Doctor {
       ...allLibs
     ]
 
-    return new Doctor(fileNames, parsed.options, ts)
+    return new Doctor(fileNames, compilerOptions, ts)
   }
 
   getSemanticDiagnostics() {

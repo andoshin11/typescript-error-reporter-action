@@ -11,7 +11,7 @@ const referenceRegExp = /\/\/\/ <reference lib="(.*)" \/>/
 async function main() {
 
   const currentDir = process.cwd()
-  const libDTSFiles = glob.sync(path.resolve(currentDir, 'node_modules/typescript/lib/lib.*.d.ts'))
+  const libDTSFiles = glob.sync(path.resolve(currentDir, 'node_modules/typescript/lib/lib*.d.ts'))
 
   const libDTS = libDTSFiles.reduce((acc, ac) => {
     const libName = ac.replace(currentDir + '/node_modules/typescript/lib/', '')
