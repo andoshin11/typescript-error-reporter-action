@@ -30,7 +30,7 @@ jobs:
       - name: Install dependencies
         run: yarn install --frozen-lockfile
       - name: Typecheck
-        uses: andoshin11/typescript-error-reporter-action@v1.0.1
+        uses: andoshin11/typescript-error-reporter-action@v1.0.2
 ```
 
 `tsconfig.json`:
