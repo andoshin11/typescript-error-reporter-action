@@ -48,7 +48,8 @@ export const createHost = (fileNames: string[], compilerOptions: _ts.CompilerOpt
   }
 
   const host: _ts.LanguageServiceHost = {
-    getScriptFileNames: () => fileNames,
+    getScriptFileNames: () => void,
+    // getScriptFileNames: () => fileNames,
     getScriptVersion: fileName => getCurrentVersion(fileName) + '',
     getScriptSnapshot: fileName => {
       if (fileEntry.has(fileName)) {
