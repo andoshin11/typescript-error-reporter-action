@@ -22,12 +22,13 @@ jobs:
       matrix:
         node-version: [13.x]
     steps:
+      - uses: actions/checkout@v1
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v1
         with:
           node-version: ${{ matrix.node-version }}
       - name: Install dependencies
-        run: yarn --frozen-lockfile
+        run: yarn install --frozen-lockfile
       - name: Typecheck
         uses: andoshin11/typescript-error-reporter-action@v1.0.1
 ```
