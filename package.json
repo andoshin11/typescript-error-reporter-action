@@ -14,7 +14,7 @@
   "homepage": "https://github.com/andoshin11/typescript-error-reporter-action#readme",
   "scripts": {
     "build": "tsc",
-    "watch": "webpack -w",
+    "watch": "tsc -w",
     "bundle": "webpack",
     "test:type": "tsc --noEmit --incremental false",
     "pack:libDTS": "node scripts/packLibDTS.js"
