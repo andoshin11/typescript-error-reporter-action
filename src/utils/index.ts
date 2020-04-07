@@ -8,7 +8,7 @@ export function nonNullable<T>(arg: T): arg is NonNullable<T> {
 export function getAllLibs(libs: string[]) {
   const allLibs: { [name: string]: boolean } = {}
 
-  const libDTSRegexp = /^lib\..*\.d\.ts$/
+  const libDTSRegexp = /^lib.*\.d\.ts$/
 
   const resolveReferences = (libName: string) => {
     if (!libDTSRegexp.test(libName)) {
