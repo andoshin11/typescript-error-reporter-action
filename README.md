@@ -1,4 +1,4 @@
-# TypeScript Error Reporter Action ![GitHub release (latest SemVer including pre-releases)](https://img.shields.io/github/v/release/andoshin11/typescript-error-reporter?include_prereleases) ![GitHub](https://img.shields.io/github/license/andoshin11/typescript-error-reporter)
+# TypeScript Error Reporter Action ![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/andoshin11/typescript-error-reporter-action) ![GitHub](https://img.shields.io/github/license/andoshin11/typescript-error-reporter-action)
 
 Ensuring type safety is one of the most important responsibilities of modern software developers.
 
@@ -22,12 +22,13 @@ jobs:
       matrix:
         node-version: [13.x]
     steps:
+      - uses: actions/checkout@v1
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v1
         with:
           node-version: ${{ matrix.node-version }}
       - name: Install dependencies
-        run: yarn --frozen-lockfile
+        run: yarn install --frozen-lockfile
       - name: Typecheck
         uses: andoshin11/typescript-error-reporter-action@v1.0.1
 ```
