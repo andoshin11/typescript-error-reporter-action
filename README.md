@@ -1,4 +1,4 @@
-# TypeScript Error Reporter Action ![GitHub release (latest SemVer including pre-releases)](https://img.shields.io/github/v/release/andoshin11/typescript-error-reporter?include_prereleases) ![GitHub](https://img.shields.io/github/license/andoshin11/typescript-error-reporter)
+# TypeScript Error Reporter Action ![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/andoshin11/typescript-error-reporter-action) ![GitHub](https://img.shields.io/github/license/andoshin11/typescript-error-reporter-action)
 
 Ensuring type safety is one of the most important responsibilities of modern software developers.
 
