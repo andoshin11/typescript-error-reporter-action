@@ -6,6 +6,8 @@ import * as YarnLockFile from '@yarnpkg/lockfile'
 import { Doctor } from './doctor'
 import { loadTSModule } from './loadTSModule'
 
+const A: string = undefined
+
 function parseTSVersion(currentDir: string) {
   const yarnLockFilePath = path.resolve(currentDir, 'yarn.lock')
   const packageLockFile = path.resolve(currentDir, 'package-lock.json')
