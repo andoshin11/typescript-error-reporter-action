@@ -20,8 +20,9 @@ export class Doctor {
 
   static fromConfigFile(configPath: string, ts: typeof _ts): Doctor {
     const content = fs.readFileSync(configPath).toString();
+    const { config } = ts.parseConfigFileTextToJson(configPath, content)
     const parsed = ts.parseJsonConfigFileContent(
-        JSON.parse(content),
+        config,
         ts.sys,
         path.dirname(configPath)
     );
