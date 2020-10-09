@@ -10,14 +10,14 @@ export const createHost = (fileNames: string[], compilerOptions: _ts.CompilerOpt
   const getCurrentVersion = (fileName: string) => fileEntry.has(fileName) ? fileEntry.get(fileName)!.version : 0
   const getTextFromSnapshot = (snapshot: _ts.IScriptSnapshot) => snapshot.getText(0, snapshot.getLength())
 
-  const readFile = (fileName: string, encoding: string | undefined = 'utf8') => {
+  const readFile = (fileName: string, encoding: BufferEncoding = 'utf8') => {
     if (libDTSRegexp.test(fileName)) {
       return libDTS[fileName].content
     }
 
     fileName = path.normalize(fileName);
     try {
-      return fs.readFileSync(fileName, encoding);
+      return fs.readFileSync(fileName, { encoding });
     } catch (e) {
       return undefined;
     }
@@ -25,7 +25,7 @@ export const createHost = (fileNames: string[], compilerOptions: _ts.CompilerOpt
 
   const readFileWithFallback = (
     filePath: string,
-    encoding?: string | undefined
+    encoding?: BufferEncoding
   ) => {
     return ts.sys.readFile(filePath, encoding) || readFile(filePath, encoding)
   }
