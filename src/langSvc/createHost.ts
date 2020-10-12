@@ -67,7 +67,7 @@ export const createHost = (fileNames: string[], compilerOptions: _ts.CompilerOpt
     },
     getCurrentDirectory: () => process.cwd(),
     getCompilationSettings: () => compilerOptions,
-    getDefaultLibFileName: options => ts.getDefaultLibFilePath(options),
+    getDefaultLibFileName: options => ts.getDefaultLibFileName(options),
     resolveModuleNames: (moduleNames, containingFile, _, __, options) => {
       const ret: (_ts.ResolvedModule | undefined)[] = moduleNames.map(name => {
           if (/\.vue$/.test(name)) {

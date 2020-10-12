@@ -49,3 +49,16 @@ jobs:
   "include": ["src/**/*.ts"]
 }
 ```
+
+## Passing `project` parameter
+
+If your working with a monorepo or your `tsconfig.json` is not in the root repo,
+or you use different config file, you can provide a `project` parmeter with a
+path to the repo itself:
+
+```yaml
+- name: Typecheck
+  uses: andoshin11/typescript-error-reporter-action@v1.0.3
+  with:
+    project: packages/subpackage/tsconfig.json
+```

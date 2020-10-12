@@ -7,3 +7,7 @@ runs:
 branding:
   icon: 'check-circle'
   color: 'blue'
+inputs:
+  project:
+    description: 'Optional project path.'
+    required: false
