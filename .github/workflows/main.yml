@@ -1,6 +1,14 @@
 name: main
 
-on: [push]
+on:
+  push:
+    branches:
+      - master
+      - main
+      - default
+  pull_request:
+    branches:
+      - '**'
 
 jobs:
   test:
@@ -23,5 +31,11 @@ jobs:
             ${{ runner.os }}-node-
       - name: Install dependencies
         run: yarn install --frozen-lockfile
+      - name: Build
+        run: yarn build
       - name: Typecheck
         uses: ./
+      - name: Typecheck projectFixtures/sub
+        uses: ./
+        with:
+          project: projectFixtures/sub

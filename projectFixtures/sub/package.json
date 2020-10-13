@@ -1,0 +1,7 @@
+{
+  "name": "sub",
+  "private": "true",
+  "devDependencies": {
+    "typescript": "4.0.3"
+  }
+}

@@ -9,10 +9,10 @@ import { loadTSModule } from './loadTSModule'
 async function main() {
   try {
     const project = getInput('project') || 'tsconfig.json'
-    const tscPath = getInput('tsc')
-    const projectPath = path.resolve(process.cwd(), project)
-    if (!fs.existsSync(projectPath)) {
-      throw new Error(`No such TS config file: ${projectPath}`)
+    const projectPath = resolveProjectPath(path.resolve(process.cwd(), project))
+
+    if (projectPath == null) {
+      throw new Error(`No valid typescript project was not found at: ${projectPath}`)
     }
 
     const ts = await loadTSModule(projectPath)
@@ -31,6 +31,22 @@ async function main() {
   } catch (e) {
     console.error(e.toString())
     setFailed(e)
+  }
+}
+
+/**
+ * Attempts to resolve ts config file and returns either path to it or `null`.
+ */
+const resolveProjectPath = (projectPath:string) => {
+  try {
+    if (fs.statSync(projectPath).isFile()) {
+      return projectPath
+    } else {
+      const configPath = path.resolve(projectPath, "tsconfig.json")
+      return fs.statSync(configPath).isFile() ? configPath : null
+    }
+  } catch {
+    return null
   }
 }
 
