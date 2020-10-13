@@ -1,6 +1,14 @@
 name: main
 
-on: [push]
+on:
+  push:
+    branches:
+      - master
+      - main
+      - default
+  pull_request:
+    branches:
+      - '**'
 
 jobs:
   test:
