@@ -29,6 +29,7 @@ async function main() {
     }
 
   } catch (e) {
+    console.error(e.toString())
     setFailed(e)
   }
 }
