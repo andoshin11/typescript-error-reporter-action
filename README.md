@@ -1,4 +1,4 @@
-# TypeScript Error Reporter Action ![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/andoshin11/typescript-error-reporter-action) ![GitHub](https://img.shields.io/github/license/andoshin11/typescript-error-reporter-action)
+# TypeScript Error Reporter Action ![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/gozala/typescript-error-reporter-action) ![GitHub](https://img.shields.io/github/license/gozala/typescript-error-reporter-action)
 
 Ensuring type safety is one of the most important responsibilities of modern software developers.
 
@@ -30,7 +30,7 @@ jobs:
       - name: Install dependencies
         run: yarn install --frozen-lockfile
       - name: Typecheck
-        uses: andoshin11/typescript-error-reporter-action@v1.0.2
+        uses: gozala/typescript-error-reporter-action@v1.0.5
 ```
 
 `tsconfig.json`:
@@ -58,7 +58,7 @@ path to the repo itself:
 
 ```yaml
 - name: Typecheck
-  uses: andoshin11/typescript-error-reporter-action@v1.0.3
+  uses: gozala/typescript-error-reporter-action@v1.0.5
   with:
     project: packages/subpackage/tsconfig.json
 ```
