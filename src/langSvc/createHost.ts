@@ -6,7 +6,7 @@ import { libDTS } from '../gen/libDTS'
 
 const libDTSRegexp = /^lib\..*\.d\.ts$/
 
-export const createHost = (fileNames: string[], compilerOptions: _ts.CompilerOptions, fileEntry: FileEntry, ts: typeof _ts): _ts.LanguageServiceHost => {
+export const createHost = (fileNames: string[], config: _ts.ParsedCommandLine, fileEntry: FileEntry, ts: typeof _ts): _ts.LanguageServiceHost => {
   const getCurrentVersion = (fileName: string) => fileEntry.has(fileName) ? fileEntry.get(fileName)!.version : 0
   const getTextFromSnapshot = (snapshot: _ts.IScriptSnapshot) => snapshot.getText(0, snapshot.getLength())
 
@@ -66,7 +66,7 @@ export const createHost = (fileNames: string[], compilerOptions: _ts.CompilerOpt
       }
     },
     getCurrentDirectory: () => process.cwd(),
-    getCompilationSettings: () => compilerOptions,
+    getCompilationSettings: () => config.options,
     getDefaultLibFileName: options => ts.getDefaultLibFileName(options),
     resolveModuleNames: (moduleNames, containingFile, _, __, options) => {
       const ret: (_ts.ResolvedModule | undefined)[] = moduleNames.map(name => {
@@ -87,6 +87,7 @@ export const createHost = (fileNames: string[], compilerOptions: _ts.CompilerOpt
       });
       return ret;
     },
+    getProjectReferences: () => config.projectReferences,
     fileExists: moduleResolutionHost.fileExists,
     readFile: moduleResolutionHost.readFile,
     readDirectory: ts.sys.readDirectory,
