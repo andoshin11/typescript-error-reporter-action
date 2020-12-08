@@ -17,7 +17,7 @@ export const createHost = (fileNames: string[], compilerOptions: _ts.CompilerOpt
 
     fileName = path.normalize(fileName);
     try {
-      return fs.readFileSync(fileName, encoding);
+      return fs.readFileSync(fileName, encoding as 'utf8');
     } catch (e) {
       return undefined;
     }
