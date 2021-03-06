@@ -63,7 +63,7 @@ async function main() {
 
     const tsVersion = parseTSVersion(currentDir)
     const remoteTS = await loadTSModule(tsVersion)
-  
+
     const doctor = Doctor.fromConfigFile(configPath, remoteTS)
     const diagnostics = doctor.getSemanticDiagnostics()
 
@@ -76,7 +76,7 @@ async function main() {
     }
 
   } catch (e) {
-    setFailed(e)
+    setFailed(e.toString())
   }
 }
 
