@@ -19,9 +19,12 @@ export class Doctor {
   }
 
   static fromConfigFile(configPath: string, ts: typeof _ts): Doctor {
-    const content = fs.readFileSync(configPath).toString();
+    const { config, error } = ts.readConfigFile(configPath, ts.sys.readFile);
+    if (error) {
+      throw new Error(`Error while reading ${configPath}: ` + ts.flattenDiagnosticMessageText(error.messageText, '\n'))
+    }
     const parsed = ts.parseJsonConfigFileContent(
-        JSON.parse(content),
+        config,
         ts.sys,
         path.dirname(configPath)
     );
