@@ -26,16 +26,15 @@ function parseTSVersionFromYarnLockFile(content: string) {
     throw new Error('failed to parse yarn.lock')
   }
   const packages = Object.keys(object)
-  const _typescript = packages.find(p => /^typescript@.*/.test(p))
-  if (!_typescript) {
+  const _typescript = packages.filter(p => /^typescript@.*/.test(p))
+  if (!_typescript.length) {
     throw new Error('could not find typescript in yarn.lock')
   }
-  const _typescriptInfo = object[_typescript]
-  const tsVersion = _typescriptInfo && _typescriptInfo['version']
-  if (typeof tsVersion !== 'string') {
+  const latestTSVersion = _typescript.map(v => object[v] && object[v]['version']).sort().reverse()[0]
+  if (typeof latestTSVersion !== 'string') {
     throw new Error('could not par typescript version from yarn.lock')
   }
-  return tsVersion
+  return latestTSVersion
 }
 
 function parseTSVersionFromPackageLockFile(content: string) {
@@ -82,7 +81,7 @@ async function main() {
       }
     }
 
-  } catch (e) {
+  } catch (e: any) {
     setFailed(e)
   }
 }
