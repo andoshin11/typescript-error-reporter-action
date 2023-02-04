@@ -32,6 +32,27 @@ export class Doctor {
     const allLibs = getAllLibs(uniq(libs))
 
     /**
+     * Note: somehow, `types` option inside tsconfig.json is ignored.
+     */
+    const { typeRoots, types } = compilerOptions
+    const _typeRoots = [path.resolve(path.dirname(configPath), './node_modules/@types'), path.resolve(path.dirname(configPath), './node_modules'), ...(typeRoots || [])]
+    let typesFiles = (types || []).map(t => {
+      for (const typeRoot of _typeRoots) {
+        const modulePath = path.resolve(typeRoot, t)
+        if (fs.existsSync(modulePath)) {
+          const entrypoint = JSON.parse(fs.readFileSync(path.resolve(modulePath, 'package.json'), 'utf-8'))['types']
+          const entrypointPath = path.resolve(modulePath, entrypoint)
+          if (fs.existsSync(entrypointPath)) {
+            return entrypointPath
+          }
+        }
+      }
+
+      return null
+    }).filter(Boolean) as string[]
+
+
+    /**
      * Note:
      * 
      * since we use CDN-hosted TS runtime, which is a bundled version,
@@ -39,7 +60,8 @@ export class Doctor {
      */
     const fileNames = [
       ...parsed.fileNames,
-      ...allLibs
+      ...allLibs,
+      ...typesFiles
     ]
 
     return new Doctor(fileNames, compilerOptions, ts)

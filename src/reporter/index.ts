@@ -15,7 +15,6 @@ export class Reporter {
 
     const messages = targetDiagnostics.map(d => diagnostic2message(d, ts)).filter(nonNullable)
     messages.forEach(({ command, properties, message }) => {
-      // @ts-ignore
       issueCommand(command, properties, message)
     })
   }
