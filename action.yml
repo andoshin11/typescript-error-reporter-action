@@ -6,7 +6,7 @@ inputs:
     description: 'Path to run from. If not set, top level directory will be used.'
     required: false
 runs:
-  using: 'node12'
+  using: 'node16'
   main: 'dist/index.js'
 branding:
   icon: 'check-circle'
